@@ -1,4 +1,6 @@
-
+"""
+    Used to ignore importing any textures with names matching from https://github.com/Mojang/bedrock-samples/tree/main/resource_pack/textures/blocks
+"""
 IGNORED_TEXTURES = ["camera", "water_flow", "coral", "glass", "portal", "dripleaf", "stem", "flower", "wheat","carrots"
                     "candle", "carrots_stage_0", "leaf", "fire", "shulker", "water", "door", "comparator", "grass_top",
                     "tone_slab_side", "leaves", "enchanting_table", "hopper", "jigsaw", "cauldron", "frogspawn", "candle",

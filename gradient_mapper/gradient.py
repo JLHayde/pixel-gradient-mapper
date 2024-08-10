@@ -84,39 +84,33 @@ def apply_noise(image, noise_level):
 
 
 # Parameters
-def generate_image(width, height, start, end, noise, use_colour, pos1, pos2,
-                   filters=()):
-    #now = time.time()
+def generate_image(width, height, start, end, noise, use_colour, pos1, pos2, filters=()):
+    """
 
-    # Create gradient
+    :param width:
+    :param height:
+    :param start:
+    :param end:
+    :param noise:
+    :param use_colour:
+    :param pos1:
+    :param pos2:
+    :param filters:
+    :return:
+    """
+
+
     gradient = create_gradient(width, height, start, end, pos1, pos2)
-
-    # Apply noise
     noisy_gradient = apply_noise(gradient, noise)
-
     image_size = 16
-
-    #dimensions_x, dimensions_y = width * image_size, height * image_size
-
-    #img = Image.new(mode="RGB", size=(dimensions_x, dimensions_y))
-
     cached_images = {}
-    cached_colours = {}
-
     image_map = {}
-
-    #total_time = 0
 
     for x, i in enumerate(noisy_gradient):
         for y, j in enumerate(i):
             nd_key = tuple(j)
-            # print(j)
-            #cached_colour = cached_colours.get(nd_key)
-
-            # if not cached_colour:
 
             img_path, col = find_closest_color(nd_key, item_filter=filters)
-            #   cached_colours[img_path] = nd_key
 
             if use_colour:
 
@@ -140,7 +134,6 @@ def generate_image(width, height, start, end, noise, use_colour, pos1, pos2,
 
 
 if __name__ == "__main__":
-
     start_color = (176, 176, 176)  # Red
     end_color = (28, 28, 28)  # Blue
     generate_image(12, 32, start_color, end_color, 2)
