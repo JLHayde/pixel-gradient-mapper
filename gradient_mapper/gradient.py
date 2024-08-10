@@ -48,7 +48,7 @@ def generate_perlin_noise(width, height, scale=10):
 
 def create_gradient(width, height, start_color, end_color, pos1=0, pos2=1):
     """
-    Create a gradient image from start_color to end_color.
+        Create a gradient image from start_color to end_color.
     """
     gradient = np.zeros((height, width, 3), dtype=np.uint8)
 
@@ -85,8 +85,8 @@ def apply_noise(image, noise_level):
 
 # Parameters
 def generate_image(width, height, start, end, noise, use_colour, pos1, pos2,
-                   filters=(r"D:\Users\Hayden\Programming\pixel-gradient-mapper\pallete\wool_colored_white.png")):
-    now = time.time()
+                   filters=()):
+    #now = time.time()
 
     # Create gradient
     gradient = create_gradient(width, height, start, end, pos1, pos2)
@@ -96,26 +96,26 @@ def generate_image(width, height, start, end, noise, use_colour, pos1, pos2,
 
     image_size = 16
 
-    dimensions_x, dimensions_y = width * image_size, height * image_size
+    #dimensions_x, dimensions_y = width * image_size, height * image_size
 
-    img = Image.new(mode="RGB", size=(dimensions_x, dimensions_y))
+    #img = Image.new(mode="RGB", size=(dimensions_x, dimensions_y))
 
     cached_images = {}
     cached_colours = {}
 
     image_map = {}
 
-    total_time = 0
+    #total_time = 0
 
     for x, i in enumerate(noisy_gradient):
         for y, j in enumerate(i):
             nd_key = tuple(j)
             # print(j)
-            cached_colour = cached_colours.get(nd_key)
+            #cached_colour = cached_colours.get(nd_key)
 
             # if not cached_colour:
 
-            img_path, col = find_closest_color(nd_key, filter=filters)
+            img_path, col = find_closest_color(nd_key, item_filter=filters)
             #   cached_colours[img_path] = nd_key
 
             if use_colour:
@@ -140,11 +140,7 @@ def generate_image(width, height, start, end, noise, use_colour, pos1, pos2,
 
 
 if __name__ == "__main__":
+
     start_color = (176, 176, 176)  # Red
     end_color = (28, 28, 28)  # Blue
-
     generate_image(12, 32, start_color, end_color, 2)
-# Convert to Image and save
-# gradient_image = Image.fromarray(noisy_gradient)
-# gradient_image.save('noisy_gradient.png')
-# gradient_image.show()

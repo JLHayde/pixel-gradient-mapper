@@ -1,8 +1,6 @@
-import json
 import os.path
 from functools import lru_cache
 
-import cv2
 from PIL import Image
 from PIL import ImageCms
 import numpy as np
@@ -12,13 +10,9 @@ import constants
 import image_fetch
 import pickle
 
-from colorthief import ColorThief
+from PySide6.QtCore import QSettings
 
 CACHE_FILE = "cache.grd"
-
-from importlib import reload
-
-
 
 
 def convert_to_srgb(img):
@@ -111,9 +105,9 @@ def load_texture_mappings(rebuild=False, filter=filters):
 #
     else:
 
+        palette_folder = os.path.join(os.path.dirname(__file__), "palette")
 
-
-        textures = image_fetch.search_folder(r"D:\Users\Hayden\Programming\pixel-gradient-mapper\pallete",
+        textures = image_fetch.search_folder(palette_folder,
                                              "png")
 
         mapping = map_average_colours(textures)
@@ -132,13 +126,13 @@ def load_texture_mappings(rebuild=False, filter=filters):
 TEXTURES = load_texture_mappings()["mappings"]
 
 @lru_cache(maxsize=None)
-def find_closest_color(target_color, filter=()):
+def find_closest_color(target_color, item_filter=()):
     closest_color = None
     min_dist = float('inf')
     closest_image_path = None
 
     for image_path, color in TEXTURES.items():
-        if image_path not in filter:
+        if image_path not in item_filter:
             dist = distance.euclidean(target_color, color)
             if dist < min_dist:
                 min_dist = dist

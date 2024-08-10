@@ -11,20 +11,19 @@ from widgets import GradientWidget, GradientRange
 from superqt.sliders import QRangeSlider
 
 
-
 class PixelGraph(QGraphicsView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        #self.setDragMode(QGraphicsView.ScrollHandDrag)
+        # self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.setRenderHint(QPainter.Antialiasing)
-        #self.setRenderHint(QPainter.RenderHint.)
+        # self.setRenderHint(QPainter.RenderHint.)
         self.setRenderHint(QPainter.TextAntialiasing)
-        #self.setRenderHint(QPainter.SmoothPixmapTransform)
-        #scene = QGraphicsScene(self)
-        #self.setScene(scene)
+        # self.setRenderHint(QPainter.SmoothPixmapTransform)
+        # scene = QGraphicsScene(self)
+        # self.setScene(scene)
 
-        self.setSceneRect(QRect(1000,1000, 0, 0))
+        self.setSceneRect(QRect(1000, 1000, 0, 0))
 
         self._pan = False
         self._pan_start_x, self._pan_start_y = 0, 0
@@ -82,7 +81,6 @@ class PixelGraph(QGraphicsView):
     def mouseMoveEvent(self, event: PySide6.QtGui.QMouseEvent) -> None:
 
         if event.buttons() == QtCore.Qt.MouseButton.MiddleButton:
-
             delta = event.pos() - self._last_pan_point
 
             print(delta)
@@ -93,34 +91,32 @@ class PixelGraph(QGraphicsView):
 
         super().mouseMoveEvent(event)
 
-class ColorPickerWindow(QMainWindow):
 
+class ColorPickerWindow(QMainWindow):
     colour_changed = Signal()
 
     def __init__(self):
         super().__init__()
 
-        self.picked_colour: QColor = QColor(255,255,255)
+        self.picked_colour: QColor = QColor(255, 255, 255)
         self.timer = QTimer()
 
-        self.picked_colour2: QColor = QColor(0,0,0)
+        self.picked_colour2: QColor = QColor(0, 0, 0)
 
         self._settings = QSettings()
 
         self._color_picker_1 = QColorDialog(self)
-        #self._color_picker_1.currentColorChanged()
-
-
+        # self._color_picker_1.currentColorChanged()
 
         self.setWindowTitle("Color Picker and Image Viewer")
         self.setGeometry(100, 100, 800, 600)
 
-        #self.color_label = QLabel("Selected Color: None", self)
-        #self.color_label.setAlignment(Qt.AlignCenter)
+        # self.color_label = QLabel("Selected Color: None", self)
+        # self.color_label.setAlignment(Qt.AlignCenter)
 
-        #self.image_label = QLabel(self)
-        #self.image_label.setAlignment(Qt.AlignCenter)
-        #self.image_label.setText("No image loaded")
+        # self.image_label = QLabel(self)
+        # self.image_label.setAlignment(Qt.AlignCenter)
+        # self.image_label.setText("No image loaded")
 
         self.pick_color_button = QPushButton("Pick Color", self)
         self.pick_color_button.clicked.connect(self.open_color_picker)
@@ -138,13 +134,13 @@ class ColorPickerWindow(QMainWindow):
         self.use_col = QCheckBox(self)
 
         self.scene = QGraphicsScene()
-        #self.view = PixelGraph(self.scene)
+        # self.view = PixelGraph(self.scene)
         self.image_view = PixelGraph(self.scene)
 
         self.removed_scene = QGraphicsScene()
-        #self.view = PixelGraph(self.scene)
+        # self.view = PixelGraph(self.scene)
         self.removed_view = PixelGraph(self.removed_scene)
-        self.removed_view.setSceneRect(QRect(200,500, 0, 0))
+        self.removed_view.setSceneRect(QRect(200, 500, 0, 0))
 
         colour_picker_layout = QVBoxLayout()
 
@@ -153,18 +149,15 @@ class ColorPickerWindow(QMainWindow):
         self.gradient_picker = GradientWidget(self.picked_colour, self.picked_colour2)
         self.gradient_range = GradientRange(Qt.Orientation.Vertical)
         self.gradient_range.setValue((0, 100))
-        #self.gradient_range.sliderPressed.connect(self.slider_pressed)
         gradient_range_layout.addWidget(self.gradient_range)
         gradient_range_layout.addWidget(self.gradient_picker)
 
         self.gradient_range.valueChanged.connect(self.update_gradient)
 
-
         colour_picker_layout.addWidget(self.pick_color_button)
 
         colour_picker_layout.addLayout(gradient_range_layout)
         colour_picker_layout.addWidget(self.pick_color_button2)
-
 
         dimension_layout = QGridLayout()
         width_label = QLabel("X: ")
@@ -172,48 +165,43 @@ class ColorPickerWindow(QMainWindow):
         noise_label = QLabel("Noise: ")
         show_col_label = QLabel("Show Colours: ")
 
-        #self.width_spin_box.setMaximumWidth(100)
-        #self.height_spin_box.setMaximumWidth(100)
-        #self.noise_spin_box.setMaximumWidth(100)
+        # self.width_spin_box.setMaximumWidth(100)
+        # self.height_spin_box.setMaximumWidth(100)
+        # self.noise_spin_box.setMaximumWidth(100)
         self.width_spin_box.setMinimumWidth(100)
         self.height_spin_box.setMinimumWidth(100)
         self.noise_spin_box.setMinimumWidth(100)
 
-        #self.width_spin_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        #self.height_spin_box.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
-        #self.noise_spin_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        #self.use_col.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        # self.width_spin_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        # self.height_spin_box.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
+        # self.noise_spin_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        # self.use_col.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        dimension_layout.addWidget(width_label, 0,0)
+        dimension_layout.addWidget(width_label, 0, 0)
         dimension_layout.addWidget(self.width_spin_box, 0, 1)
         dimension_layout.addWidget(height_label, 1, 0)
-        dimension_layout.addWidget(self.height_spin_box,1,1)
+        dimension_layout.addWidget(self.height_spin_box, 1, 1)
         dimension_layout.addWidget(noise_label, 2, 0)
-        dimension_layout.addWidget(self.noise_spin_box,2,1)
+        dimension_layout.addWidget(self.noise_spin_box, 2, 1)
         dimension_layout.addWidget(show_col_label, 3, 0)
-        dimension_layout.addWidget(self.use_col,3,1)
+        dimension_layout.addWidget(self.use_col, 3, 1)
 
         removed_items_layout = QVBoxLayout()
         removed_items_layout.addWidget(self.removed_view)
 
-
-        #self.pick_color_button.clicked.connect(self.open_color_picker)
+        # self.pick_color_button.clicked.connect(self.open_color_picker)
 
         spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        #dimension_layout.addItem(spacer, 4,0)
+        # dimension_layout.addItem(spacer, 4,0)
 
         config_layout = QVBoxLayout()
         config_layout.addLayout(dimension_layout)
         config_layout.addLayout(removed_items_layout)
-        #config_layout.addItem(spacer)
+        # config_layout.addItem(spacer)
 
-
-
-        #ontainer = QWidget()
-        #ontainer.setLayout(main_layout)
-        #elf.setCentralWidget(container)
-
-
+        # ontainer = QWidget()
+        # ontainer.setLayout(main_layout)
+        # elf.setCentralWidget(container)
 
         editor_layout = QHBoxLayout()
 
@@ -223,54 +211,28 @@ class ColorPickerWindow(QMainWindow):
 
         editor_layout.addLayout(config_layout)
 
-
         layout = QVBoxLayout()
 
         layout.addLayout(editor_layout)
-        #layout.addWidget(self.color_label)
-        #layout.addWidget(self.pick_color_button)
-        #layout.addWidget(self.pick_color_button2)
+        # layout.addWidget(self.color_label)
+        # layout.addWidget(self.pick_color_button)
+        # layout.addWidget(self.pick_color_button2)
 
-        #layout.addWidget(self.image_label)
-        #layout.addWidget(self.load_image_button)
-        #layout.addWidget(self.width_spin_box)
-        #layout.addWidget(self.height_spin_box)
-        #layout.addWidget(self.noise_spin_box)
-        #layout.addWidget(self.use_col)
+        # layout.addWidget(self.image_label)
+        # layout.addWidget(self.load_image_button)
+        # layout.addWidget(self.width_spin_box)
+        # layout.addWidget(self.height_spin_box)
+        # layout.addWidget(self.noise_spin_box)
+        # layout.addWidget(self.use_col)
 
         container = QWidget()
         container.setLayout(layout)
 
         self.setCentralWidget(container)
 
-
-    def slider_pressed(self, *args):#
-        print(args)
-
     def update_gradient(self, ranges):
-
-        print(ranges)
-
         self.gradient_picker.set_pos1(ranges[1])
         self.gradient_picker.set_pos2(ranges[0])
-
-
-    def start_timer(self):
-        """Start the timer with a 1000ms interval (1 second)"""
-        self.timer.start(1000)  # Interval in milliseconds
-        self.time_count = 0  # Reset time count when starting
-        self.update_time()  # Update immediately
-
-    def stop_timer(self):
-        """Stop the timer"""
-        self.timer.stop()
-
-    def update_time(self):
-        """Update the timer display"""
-        self.time_count += 1
-        #self.timer_label.setText(f"Time: {self.time_count}")
-
-
 
     def colorChanged(self, color):
         self.pick_color_button.setStyleSheet(f"background-color: {color.name()}; color: #ffffff")
@@ -284,35 +246,19 @@ class ColorPickerWindow(QMainWindow):
         self.gradient_picker.set_colours(self.picked_colour, self.picked_colour2)
         self.colour_changed.emit()
 
-
     def open_color_picker(self, x):
+
         dialog = QColorDialog(self)
-        initial_color = QColor(self.picked_colour)  # Red color
+        initial_color = QColor(self.picked_colour)
         dialog.setCurrentColor(initial_color)
-
-        #dialog = QColorDialog(self)
-        #dialog.setCurrentColor(QColor(255, 0, 0))  # Set initial color to red
-
         dialog.currentColorChanged.connect(self.colorChanged)
-
         dialog.exec()
 
-        #if dialog.exec():
-        #    color = dialog.selectedColor()
-        ##if color.isValid():
-        #    #self.color_label.setText(f"Selected Color: {color.name()}")
-        #    self.pick_color_button.setStyleSheet(f"background-color: {color.name()}; color: #ffffff")
-        #    self.picked_colour = color
-#
-        #self.gradient_picker.set_colours(self.picked_colour, self.picked_colour2)
 
 
     def open_color_picker2(self, x):
         dialog = QColorDialog(self)
-        initial_color = QColor(self.picked_colour2)  # Red color
+        initial_color = QColor(self.picked_colour2)
         dialog.setCurrentColor(initial_color)
-
         dialog.currentColorChanged.connect(self.colorChanged2)
-
         dialog.exec()
-
