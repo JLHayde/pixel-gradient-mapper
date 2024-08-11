@@ -108,7 +108,7 @@ class ColorPickerWindow(QMainWindow):
         self._color_picker_1 = QColorDialog(self)
         # self._color_picker_1.currentColorChanged()
 
-        self.setWindowTitle("Color Picker and Image Viewer")
+        self.setWindowTitle("Gradient Mapper")
         self.setGeometry(100, 100, 800, 600)
 
         # self.color_label = QLabel("Selected Color: None", self)
