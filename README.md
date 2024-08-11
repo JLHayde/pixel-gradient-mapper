@@ -1,10 +1,11 @@
 # Pixel Gradient Mapper
-![image info](./docs/app.png)
-
 Maps a palette of images to a gradient. Uses the average colour of an image 
 to match the closet point on the gradient.
 
-### Filters.
+![image info](./docs/app_demo.gif)
+
+
+### Filters
 Click any image in the graph to add it the filter, you can return it from the filter section on
 the bottom right at any time.
 
