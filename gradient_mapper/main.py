@@ -1,4 +1,3 @@
-# This is a sample Python script.
 import os.path
 import sys
 
@@ -8,15 +7,8 @@ from PySide6.QtGui import QPixmap, QColor, QCursor
 from PySide6.QtCore import Qt, QObject, QRectF, Signal, QPoint, QCoreApplication
 
 from ui import ColorPickerWindow
-import image_reader
-from image_reader import load_texture_mappings, find_closest_color
 from gradient import generate_image
 
-from importlib import reload
-
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 class Mixin(QObject):
     clicked = Signal(str, object)
@@ -42,9 +34,6 @@ class BlockImage(QGraphicsRectItem, Mixin):
         self.clicked.emit(self._block_path, self)
 
     def paint(self, painter, option, widget):
-        # Draw the rectangle
-        # super().paint(painter, option, widget)
-        # Draw the image inside the rectangle
         painter.drawPixmap(self.rect().toRect(), self.image)
 
     def __copy__(self, x, y, removed=True):
@@ -52,51 +41,31 @@ class BlockImage(QGraphicsRectItem, Mixin):
         new_inst.removed = removed
         return new_inst
 
-    # def setBrush(self, *args, **kwargs) -> None:
-    #    if not self._initial_brush:
-    #        self._initial_brush = args[0]
-    #    super().setBrush(*args, **kwargs)
-
     def set_active(self):
-        # self.setBrush(QColor("yellow"))
         self.active = True
 
     def mousePressEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
-
         if event.button() == Qt.MouseButton.LeftButton:
             event.accept()
             self.clicked.emit(self._block_path, self)
-            #    self.callback(self)
-            # else:
-            #    self.callback(self)
-
-            # print(self.rect())
 
     def hoverMoveEvent(self, event: QtWidgets.QGraphicsSceneHoverEvent) -> None:
 
         point = QCursor.pos() + QPoint(10, -10)
-
         self.popupLabel.setText(f"block: {os.path.basename(self._block_path)}")
-
         self.popupLabel.move(point)
-        # self.setBrush(QColor("yellow"))
 
     def hoverEnterEvent(self, event: QtWidgets.QGraphicsSceneMouseEvent) -> None:
 
-        # self.setBrush(QColor("red"))
-
         self.popupLabel.show()
-
         event.accept()
 
     def hoverLeaveEvent(self, event: QtWidgets.QGraphicsSceneHoverEvent) -> None:
         self.setBrush(QColor("blue"))
-
         if self.active:
             self.setBrush(QColor("yellow"))
 
         self.popupLabel.hide()
-
         event.accept()
 
 
@@ -146,33 +115,9 @@ class GradientMapper(ColorPickerWindow):
         self._use_colour = x
         self.draw_image()
 
-    def match_colour(self):
-
-        reload(image_reader)
-        self._mappings = load_texture_mappings()["mappings"]
-        print(len(self._mappings.keys()))
-
-        # val = random.randint(0,255)
-        col = self.picked_colour.getRgb()[:3]
-        closest_image_path, closest_color = find_closest_color(col, self._mappings)
-
-        self.color_label.setText(f"Selected Color: {self.picked_colour.name()}")
-        self.color_label.setStyleSheet(f"background-color: {self.picked_colour.name()}; color: #ffffff")
-        print(f"background-color: rgb{col}; color: #ffffff")
-        self.color_label.setStyleSheet(f"background-color: rgb{col}; color: #ffffff")
-
-        pixmap = QPixmap(closest_image_path)
-        print(closest_image_path)
-
-        # self.image_label.setPixmap(pixmap.scaled(self.image_label.size(), Qt.KeepAspectRatio ))
-        # self.image_label.setText("")
-        # self.image_label.setScaledContents(False)
-        # self.image_label.setFixedSize(pixmap.size())
-
     def draw_image(self):
 
         for item in self.scene.items():
-            # if isinstance(item, QGraphicsLineItem) or isinstance(item, FixedSizeTextItem):
             self.scene.removeItem(item)
 
         img, img_map = generate_image(self._width,
@@ -199,14 +144,13 @@ class GradientMapper(ColorPickerWindow):
 
     def add_to_filter(self, path, pixel_image: BlockImage = None):
 
-        if not path in self.filter_list:
+        if path not in self.filter_list:
             self.filter_list.append(path)
 
         pos = len(self.removed_scene.items()) * 16
         if pixel_image:
             image = pixel_image.__copy__(0, pos, removed=True)
         else:
-            # print("adding ", path)
             pixmap = QPixmap(path)
             image = BlockImage(0, pos, 16, 16, pixmap=pixmap, block_path=path)
             image.removed = True

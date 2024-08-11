@@ -1,9 +1,12 @@
 # Pixel Gradient Mapper
-Maps a palette of images to a gradient. Uses the average colour of an image 
+Maps a palette of images to a 2D gradient. Uses the average colour of an image 
 to match the closet point on the gradient.
 
 ![image info](./docs/app_demo.gif)
 
+### Sessions
+The current session is stored in the registry, all settings will be retrieved 
+when loading up the app. Noise is seeded so it will persist sessions.
 
 ### Filters
 Click any image in the graph to add it the filter, you can return it from the filter section on
@@ -31,3 +34,13 @@ You can show the average colour of the sample palette texture.
 
 ### Dimensions
 You have a very large canvas, Changes at large dimensions will take longer.
+
+### How to run
+set up your venv, run `python pip install -r requirements.txt` in the root of the project
+`python gradient_mapper/main.py`
+
+### Tips
+Try not use 100% of a colour value like (255,255,255) or (255,0,0) as this can 
+limit the amount of matched closet colours, and when adding noise on top.
+
+

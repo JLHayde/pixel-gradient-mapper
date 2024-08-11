@@ -76,14 +76,12 @@ def apply_noise(image, noise_level):
     """
     np.random.seed(500)
     noise = np.random.randint(-noise_level, noise_level, (image.shape[0], image.shape[1], 1), dtype=np.int16)
-    # noise = np.mean(noise, axis=(0, 1))
     noisy_image = image.astype(np.int16) + noise
     noisy_image = np.clip(noisy_image, 0, 255).astype(np.uint8)
 
     return noisy_image
 
 
-# Parameters
 def generate_image(width, height, start, end, noise, use_colour, pos1, pos2, filters=()):
     """
 
@@ -134,6 +132,6 @@ def generate_image(width, height, start, end, noise, use_colour, pos1, pos2, fil
 
 
 if __name__ == "__main__":
-    start_color = (176, 176, 176)  # Red
-    end_color = (28, 28, 28)  # Blue
+    start_color = (176, 176, 176)
+    end_color = (28, 28, 28)
     generate_image(12, 32, start_color, end_color, 2)

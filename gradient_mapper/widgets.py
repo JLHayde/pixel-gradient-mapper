@@ -13,8 +13,8 @@ class GradientRange(QRangeSlider):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.color1 = (0, 0, 255)  # Blue
-        self.color2 = (255, 0, 0)  # Red
+        self.color1 = (0, 0, 255)
+        self.color2 = (255, 0, 0)
 
     def show_color_picker(self, pos):
         color_dialog = QColorDialog(self.color, self)
@@ -25,8 +25,8 @@ class GradientRange(QRangeSlider):
 class GradientWidget(QWidget):
     def __init__(self, colour1=None, colour2=None):
         super().__init__()
-        self.color1 = colour1 if colour1 else QColor(0, 0, 255)  # Blue
-        self.color2 = colour2 if colour2 else QColor(255, 0, 0)  # Red
+        self.color1 = colour1 if colour1 else QColor(0, 0, 255)
+        self.color2 = colour2 if colour2 else QColor(255, 0, 0)
         self.pos1 = 0.0
         self.pos2 = 1.0
         self.setMinimumWidth(100)

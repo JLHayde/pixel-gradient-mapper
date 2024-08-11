@@ -15,14 +15,8 @@ class PixelGraph(QGraphicsView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.setRenderHint(QPainter.Antialiasing)
-        # self.setRenderHint(QPainter.RenderHint.)
         self.setRenderHint(QPainter.TextAntialiasing)
-        # self.setRenderHint(QPainter.SmoothPixmapTransform)
-        # scene = QGraphicsScene(self)
-        # self.setScene(scene)
-
         self.setSceneRect(QRect(1000, 1000, 0, 0))
 
         self._pan = False
@@ -33,7 +27,6 @@ class PixelGraph(QGraphicsView):
         self._pan_start_y = event.position().y()
 
     def wheelEvent(self, event: QWheelEvent) -> None:
-        #
         modifiers = QApplication.keyboardModifiers()
         if modifiers == QtCore.Qt.KeyboardModifier.ControlModifier:
             super().wheelEvent(event)
@@ -42,20 +35,16 @@ class PixelGraph(QGraphicsView):
             zoomInFactor = 1.25
             zoomOutFactor = 1 / zoomInFactor
 
-            # Save the scene pos
             oldPos = self.mapToScene(event.position().toPoint())
 
-            # Zoom
             if event.angleDelta().y() > 0:
                 zoomFactor = zoomInFactor
             else:
                 zoomFactor = zoomOutFactor
             self.scale(zoomFactor, zoomFactor)
 
-            # Get the new position
             newPos = self.mapToScene(event.position().toPoint())
 
-            # Move scene to old position
             delta = newPos - oldPos
             self.translate(delta.x(), delta.y())
 
@@ -74,16 +63,13 @@ class PixelGraph(QGraphicsView):
         if event.button() == Qt.MouseButton.MiddleButton:
             self._pan = False
             self.setCursor(Qt.CursorShape.ArrowCursor)
-        #
         super().mouseReleaseEvent(event)
 
-    #
     def mouseMoveEvent(self, event: PySide6.QtGui.QMouseEvent) -> None:
 
         if event.buttons() == QtCore.Qt.MouseButton.MiddleButton:
             delta = event.pos() - self._last_pan_point
 
-            print(delta)
             self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - delta.x())
             self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta.y())
             self._last_pan_point = event.pos()
@@ -98,25 +84,12 @@ class ColorPickerWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.picked_colour: QColor = QColor(255, 255, 255)
-        self.timer = QTimer()
-
-        self.picked_colour2: QColor = QColor(0, 0, 0)
-
-        self._settings = QSettings()
-
-        self._color_picker_1 = QColorDialog(self)
-        # self._color_picker_1.currentColorChanged()
-
         self.setWindowTitle("Gradient Mapper")
         self.setGeometry(100, 100, 800, 600)
 
-        # self.color_label = QLabel("Selected Color: None", self)
-        # self.color_label.setAlignment(Qt.AlignCenter)
-
-        # self.image_label = QLabel(self)
-        # self.image_label.setAlignment(Qt.AlignCenter)
-        # self.image_label.setText("No image loaded")
+        self.picked_colour: QColor = QColor(255, 255, 255)
+        self.picked_colour2: QColor = QColor(0, 0, 0)
+        self._settings = QSettings()
 
         self.pick_color_button = QPushButton("Pick Color", self)
         self.pick_color_button.clicked.connect(self.open_color_picker)
@@ -134,16 +107,13 @@ class ColorPickerWindow(QMainWindow):
         self.use_col = QCheckBox(self)
 
         self.scene = QGraphicsScene()
-        # self.view = PixelGraph(self.scene)
         self.image_view = PixelGraph(self.scene)
 
         self.removed_scene = QGraphicsScene()
-        # self.view = PixelGraph(self.scene)
         self.removed_view = PixelGraph(self.removed_scene)
         self.removed_view.setSceneRect(QRect(200, 500, 0, 0))
 
         colour_picker_layout = QVBoxLayout()
-
         gradient_range_layout = QHBoxLayout()
 
         self.gradient_picker = GradientWidget(self.picked_colour, self.picked_colour2)
@@ -155,7 +125,6 @@ class ColorPickerWindow(QMainWindow):
         self.gradient_range.valueChanged.connect(self.update_gradient)
 
         colour_picker_layout.addWidget(self.pick_color_button)
-
         colour_picker_layout.addLayout(gradient_range_layout)
         colour_picker_layout.addWidget(self.pick_color_button2)
 
@@ -165,17 +134,9 @@ class ColorPickerWindow(QMainWindow):
         noise_label = QLabel("Noise: ")
         show_col_label = QLabel("Show Colours: ")
 
-        # self.width_spin_box.setMaximumWidth(100)
-        # self.height_spin_box.setMaximumWidth(100)
-        # self.noise_spin_box.setMaximumWidth(100)
         self.width_spin_box.setMinimumWidth(100)
         self.height_spin_box.setMinimumWidth(100)
         self.noise_spin_box.setMinimumWidth(100)
-
-        # self.width_spin_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        # self.height_spin_box.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Minimum)
-        # self.noise_spin_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        # self.use_col.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         dimension_layout.addWidget(width_label, 0, 0)
         dimension_layout.addWidget(self.width_spin_box, 0, 1)
@@ -189,41 +150,17 @@ class ColorPickerWindow(QMainWindow):
         removed_items_layout = QVBoxLayout()
         removed_items_layout.addWidget(self.removed_view)
 
-        # self.pick_color_button.clicked.connect(self.open_color_picker)
-
-        spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        # dimension_layout.addItem(spacer, 4,0)
-
         config_layout = QVBoxLayout()
         config_layout.addLayout(dimension_layout)
         config_layout.addLayout(removed_items_layout)
-        # config_layout.addItem(spacer)
-
-        # ontainer = QWidget()
-        # ontainer.setLayout(main_layout)
-        # elf.setCentralWidget(container)
 
         editor_layout = QHBoxLayout()
-
         editor_layout.addLayout(colour_picker_layout)
-
         editor_layout.addWidget(self.image_view)
-
         editor_layout.addLayout(config_layout)
 
         layout = QVBoxLayout()
-
         layout.addLayout(editor_layout)
-        # layout.addWidget(self.color_label)
-        # layout.addWidget(self.pick_color_button)
-        # layout.addWidget(self.pick_color_button2)
-
-        # layout.addWidget(self.image_label)
-        # layout.addWidget(self.load_image_button)
-        # layout.addWidget(self.width_spin_box)
-        # layout.addWidget(self.height_spin_box)
-        # layout.addWidget(self.noise_spin_box)
-        # layout.addWidget(self.use_col)
 
         container = QWidget()
         container.setLayout(layout)
@@ -253,8 +190,6 @@ class ColorPickerWindow(QMainWindow):
         dialog.setCurrentColor(initial_color)
         dialog.currentColorChanged.connect(self.colorChanged)
         dialog.exec()
-
-
 
     def open_color_picker2(self, x):
         dialog = QColorDialog(self)

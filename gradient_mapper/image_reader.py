@@ -19,7 +19,7 @@ def convert_to_srgb(img):
     """
     icc = img.info.get('icc_profile', '')
     if icc:
-        io_handle = io.BytesIO(icc)  # virtual file
+        io_handle = io.BytesIO(icc)
         src_profile = ImageCms.ImageCmsProfile(io_handle)
         dst_profile = ImageCms.createProfile('sRGB')
         img = ImageCms.profileToProfile(img, src_profile, dst_profile)
@@ -31,7 +31,7 @@ def get_average_color(image_path, ):
     Calculate the average color of an image.
     """
 
-    img = Image.open(image_path).convert('RGB')  # Ensure the image is in RGB format
+    img = Image.open(image_path).convert('RGB')
     img = convert_to_srgb(img)
     np_img = np.array(img)
 
@@ -77,6 +77,13 @@ filters = constants.IGNORED_TEXTURES
 
 
 def load_texture_mappings(rebuild=False, filter=filters):
+    """
+        Load the cached file of images mapped to their calculated average colour,
+        Build cache if one does not exist or force rebuild if filter has changed.
+    :param rebuild:
+    :param filter:
+    :return:
+    """
     texture_mapping = {}
 
     if os.path.isfile(CACHE_FILE) and not rebuild:
@@ -84,16 +91,13 @@ def load_texture_mappings(rebuild=False, filter=filters):
             print("loading cache")
             texture_mapping = pickle.load(cache)
             cached_filter = texture_mapping["filtered_list"]
-            #
             if cached_filter != filter:
                 print("Texture filter has changed")
                 return load_texture_mappings(rebuild=True)
-    #
     else:
 
         palette_folder = os.path.join(os.path.dirname(__file__), "palette")
         textures = image_fetch.search_folder(palette_folder, "png")
-
         mapping = map_average_colours(textures)
 
         texture_mapping = {"mappings": mapping,
